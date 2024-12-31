@@ -21,6 +21,7 @@ func init() {
 	// create short code
 	r.POST("/app", CreateShortURL)
 
+	r.GET("/ding", Ding)
 	// access url
 	r.GET("/app/:shortcode", GetShortURL)
 

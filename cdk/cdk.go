@@ -35,7 +35,7 @@ func NewLambdaGolangProxyAPIDemoStack(scope constructs.Construct, id string, pro
 
 	function := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("gin-go-lambda-function"),
 		&awscdklambdagoalpha.GoFunctionProps{
-			Runtime:     awslambda.Runtime_GO_1_X(),
+			Runtime:     awslambda.Runtime_PROVIDED_AL2023(),
 			Environment: &map[string]*string{"TABLE_NAME": table.TableName()},
 			Entry:       jsii.String(functionDir),
 		})

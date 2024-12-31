@@ -44,6 +44,11 @@ type Response struct {
 const pathParameterName = "shortcode"
 const locationHeader = "Location"
 
+func Ding(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "dong",
+	})
+}
 func GetShortURL(c *gin.Context) {
 	shortCode := c.Param(pathParameterName)
 
