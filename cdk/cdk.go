@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigateway"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 
@@ -24,23 +23,11 @@ func NewLambdaGolangProxyAPIDemoStack(scope constructs.Construct, id string, pro
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	table := awsdynamodb.NewTable(stack, jsii.String("dynamodb-table"),
-		&awsdynamodb.TableProps{
-			PartitionKey: &awsdynamodb.Attribute{
-				Name: jsii.String("shortcode"),
-				Type: awsdynamodb.AttributeType_STRING},
-		})
-
-	table.ApplyRemovalPolicy(awscdk.RemovalPolicy_DESTROY)
-
 	function := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("gin-go-lambda-function"),
 		&awscdklambdagoalpha.GoFunctionProps{
-			Runtime:     awslambda.Runtime_PROVIDED_AL2023(),
-			Environment: &map[string]*string{"TABLE_NAME": table.TableName()},
-			Entry:       jsii.String(functionDir),
+			Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+			Entry:   jsii.String(functionDir),
 		})
-
-	table.GrantReadWriteData(function)
 
 	api := awsapigateway.NewLambdaRestApi(stack, jsii.String("lambda-rest-api"), &awsapigateway.LambdaRestApiProps{
 		Handler: function,
@@ -59,18 +46,13 @@ func NewLambdaGolangProxyAPIDemoStack(scope constructs.Construct, id string, pro
 			ExportName: jsii.String("API-Gateway-Endpoint"),
 			Value:      api.Url()})
 
-	awscdk.NewCfnOutput(stack, jsii.String("dynamodb-table-name"),
-		&awscdk.CfnOutputProps{
-			ExportName: jsii.String("dynamodb-table-name"),
-			Value:      table.TableName()})
-
 	return stack
 }
 
 func main() {
 	app := awscdk.NewApp(nil)
 
-	NewLambdaGolangProxyAPIDemoStack(app, "LambdaGolangProxyAPIDemoStack", &LambdaGolangProxyAPIDemoStackProps{
+	NewLambdaGolangProxyAPIDemoStack(app, "LambdaGolangProxyAPIDemoStackROHA", &LambdaGolangProxyAPIDemoStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},

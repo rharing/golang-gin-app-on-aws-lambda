@@ -19,17 +19,14 @@ func init() {
 	r := gin.Default()
 
 	// create short code
-	r.POST("/app", CreateShortURL)
+	r.GET("/hello", Hello)
 
 	r.GET("/ding", Ding)
 	// access url
-	r.GET("/app/:shortcode", GetShortURL)
 
 	// delete short code
-	r.DELETE("/app/:shortcode", DeleteShortURL)
 
 	// update short code status
-	r.PUT("/app/:shortcode", UpdateStatus)
 
 	ginLambda = ginadapter.New(r)
 }

@@ -3,13 +3,10 @@ package db
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
@@ -30,17 +27,6 @@ var ErrUrlNotActive = errors.New("url not active")
 var table string
 
 func init() {
-	table = os.Getenv("TABLE_NAME")
-	if table == "" {
-		log.Fatal("missing environment variable TABLE_NAME")
-	}
-	fmt.Println("initializing ddb client for table", table)
-
-	cfg, _ := config.LoadDefaultConfig(context.Background())
-	client = dynamodb.NewFromConfig(cfg)
-
-	fmt.Println("ddb client initialized")
-
 }
 
 func SaveURL(longurl string) (string, error) {
